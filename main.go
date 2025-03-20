@@ -1,6 +1,7 @@
 package main
 
 import (
+	"example/restapi/db"
 	"example/restapi/models"
 	"net/http"
 
@@ -8,6 +9,7 @@ import (
 )
 
 func main() {
+	db.InitDB()
 	gin.SetMode(gin.DebugMode)
 	server := gin.Default()
 	server.Use(gin.Logger())
