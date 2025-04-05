@@ -6,12 +6,12 @@ import (
 )
 
 type Event struct {
-	ID          int64
-	Name        string    `binding:"required"`
-	Description string    `binding:"required"`
-	Location    string    `binding:"required"`
-	DateTime    time.Time `binding:"required"`
-	UserID      int
+	ID          int64     `json:"id"`
+	Name        string    `json:"name" binding:"required"`
+	Description string    `json:"description" binding:"required"`
+	Location    string    `json:"location" binding:"required"`
+	DateTime    time.Time `json:"dateTime" binding:"required"`
+	UserID      int       `json:"userId"`
 }
 
 var events = []Event{}
@@ -77,7 +77,7 @@ func GetEventByID(id int64) (*Event, error) {
 func (event Event) Update() error {
 	query := `
 	UPDATE events
-	SET name = ? , description = ? , Location = ? ,  DateTime = ?
+	SET name = ? , description = ? , location = ? ,  dateTime = ?
 	WHERE id = ?
 	`
 	stmt, err := db.DB.Prepare(query)
