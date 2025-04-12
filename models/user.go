@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"example/restapi/db"
 	utils "example/restapi/utlis"
 )
@@ -47,6 +48,14 @@ func (u User) ValidateCredentails() error {
 	err := row.Scan(&retreivePassword)
 
 	if err != nil {
-		return err
+		return errors.New("credentials Invalid")
 	}
+
+	passwordIsValid := utils.CheckPasswordHash(u.Password, retreivePassword)
+
+	if !passwordIsValid {
+		return errors.New("credentails invalid")
+	}
+
+	return nil
 }
