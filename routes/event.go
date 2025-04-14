@@ -2,7 +2,6 @@ package routes
 
 import (
 	"example/restapi/models"
-	utils "example/restapi/utlis"
 	"net/http"
 	"strconv"
 
@@ -36,27 +35,15 @@ func getEvents(context *gin.Context) {
 }
 
 func createEvent(context *gin.Context) {
-	token := context.Request.Header.Get("Authorization")
-
-	if token == "" {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized"})
-		return
-	}
-
-	userId, err := utils.VerifyToken(token)
-
-	if err != nil {
-		context.JSON(http.StatusUnauthorized, gin.H{"message": "Not authorized", "error": err})
-		return
-	}
-
 	var event models.Event
-	err = context.ShouldBindJSON(&event)
+	err := context.ShouldBindJSON(&event)
 
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"message": "could not parse the requested data", "error": err})
 		return
 	}
+
+	userId := context.GetInt64("userId")
 
 	event.UserID = userId
 
